@@ -1,10 +1,13 @@
-mod lib;
+use std::ptr::addr_of_mut;
 
-fn main() {
+// mod lib;
+mod models;
+
+/*fn main() {
     let age:i8 = 19;
     println!("my age is {}", age);
     println!("u8 max num is {}, u8 min num is {}",i8::MAX, i8::MIN)
-}
+}*/
 
 
 /*// 包引用练习
@@ -97,3 +100,63 @@ fn main() {
     change(&mut name);
     println!("{}", name);
 }*/
+
+/*// 结构体
+#[derive(Debug)]
+struct User{
+    name: String,
+    age: u8,
+}
+
+impl User {
+    fn version(&self) {
+        println!("1.0")
+    }
+    fn to_string(&self)->String{
+        return String::from(format!("my name is: {}, my age is: {}", &self.name, &self.age));
+    }
+}
+
+fn main() {
+    let me = User{name:String::from("zyxm"), age: 19};
+    println!("{:#?}", me);
+}*/
+
+/*// 数组&元组
+fn main() {
+    let mut tags:[u8;3]=[0;3];
+    println!("{:?}", tags);
+    for item in tags.iter() {
+        println!("{:#?}", item);
+    }
+    for (i,item) in tags.iter().enumerate() {
+        println!("index:{}, value:{}", i, item);
+    }
+    for i in 0..tags.len() {
+        tags[i] = i as u8;
+    }
+    println!("{:#?}", tags);
+
+    let my:(&str, u8) = ("zyxm", 17);
+    println!("{:#?}", my.1)
+}*/
+
+use models::user::UserInfo;
+
+fn set_user(mut u:&mut UserInfo) {
+    u.user_id = 100;
+    u.user_name = String::from("zyxm");
+    u.user_age = 17;
+    u.user_tags = ["go", "rust", "c++", "c", "java"]
+}
+
+fn main() {
+    // let mut user = models::user::new_user_info();
+    // set_user(&mut user);
+    // println!("{:#?}", user)
+
+    let mut user_score1 = models::user::new_user_score_b();
+    user_score1.user_id = "sfs";
+    user_score1.score = 10.0;
+    println!("{:?}", user_score1.get_user_type());
+}
