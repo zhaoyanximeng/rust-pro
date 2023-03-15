@@ -1,7 +1,9 @@
+use std::ops;
 use std::ptr::addr_of_mut;
 
 // mod lib;
 mod models;
+mod api;
 
 /*fn main() {
     let age:i8 = 19;
@@ -141,6 +143,7 @@ fn main() {
     println!("{:#?}", my.1)
 }*/
 
+/*// 范型
 use models::user::UserInfo;
 
 fn set_user(mut u:&mut UserInfo) {
@@ -159,4 +162,40 @@ fn main() {
     user_score1.user_id = "sfs";
     user_score1.score = 10.0;
     println!("{:?}", user_score1.get_user_type());
+}*/
+
+use models::book_model::*;
+use api::product::*;
+use models::Phone;
+use models::Book;
+use crate::api::Stock;
+
+// fn sum<T: Products, U: Products>(p1: T, p2: U) {
+//     println!("商品总价是{}", p1.get_price() + p2.get_price())
+// }
+
+fn sum(p1: Book, p2: Book) {
+    println!("商品总价是{}", p1 + p2);
+}
+
+fn show_product<T: Products>(p: T) {
+    println!("商品价格是{}", p.get_price())
+}
+
+fn show_detail<T: Products + Stock>(p: T) where T: Products + Stock {
+    println!("商品库存是：{}", p.get_stock())
+}
+
+fn main() {
+    // let book:Book = Products::new(100, 20.0);
+    // // show_product(book);
+    // let phone:Phone = Products::new(102, 30.0);
+    // sum(book, phone)
+
+    // let book:Book = Products::new(100, 20.0);
+    // show_detail(book);
+
+    let book1:Book = Products::new(100, 20.0);
+    let book2:Book = Products::new(100, 30.0);
+    sum(book1 , book2)
 }
