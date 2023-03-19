@@ -80,3 +80,22 @@ fn main() {
         println!("{}", ret);
     }
 }*/
+
+static mut N: i32 = 0;
+
+fn main() {
+    let mut n = 0;
+    let mut pool = Vec::new();
+    for _ in 0..15 {
+        pool.push(thread::spawn(move || {
+            unsafe {
+                N = N + 1;
+                println!("{}", N);
+            }
+        }))
+    }
+    for t in pool {
+        t.join().unwrap();
+    }
+    unsafe { println!("{}", N); }
+}
