@@ -225,8 +225,8 @@ fn main() {
 // enum
 #[derive(Debug)]
 enum Sex {
-    Male,
-    Female,
+    Male(String, u8),
+    Female(String),
 }
 
 #[derive(Debug)]
@@ -244,14 +244,14 @@ fn check(u:User) {
     //         println!("{}", "女性");
     //     },
     // };
-    if let Sex::Male = u.sex{
-        println!("男性");
-    } else if let Sex::Female = u.sex {
-        println!("女性");
+    if let Sex::Male(s, u) = u.sex{
+        println!("{},{}", s, u);
+    } else if let Sex::Female(s) = u.sex {
+        println!("{}", s);
     }
 }
 
 fn main() {
-    let u = User{id: 1, sex: Sex::Female};
+    let u = User{id: 1, sex: Sex::Male(String::from("男"), 1)};
     check(u);
 }
