@@ -164,6 +164,7 @@ fn main() {
     println!("{:?}", user_score1.get_user_type());
 }*/
 
+/*// trait
 use models::book_model::*;
 use api::product::*;
 use models::Phone;
@@ -198,4 +199,24 @@ fn main() {
     let book1:Book = Products::new(100, 20.0);
     let book2:Book = Products::new(100, 30.0);
     sum(book1 , book2)
+}*/
+
+// vector
+fn main() {
+    let mut tags = vec!["php", "java"];
+    tags.push("go");
+    println!("{:?}", tags);
+
+    let mut tags1:Vec<i32> = Vec::new();
+    tags1.push(1);
+    tags1.push(2);
+    for i in 0..tags1.len() {
+        println!("{:?}", tags1[i]);
+    }
+    println!("{:?}", tags1);
+
+    for i in &mut tags1 {
+        *i = *i + 10;
+    }
+    println!("{:?}", tags1);
 }
