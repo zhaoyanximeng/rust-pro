@@ -265,5 +265,6 @@ fn main() {
     echo!();
     echo!("abc");
     let a = 3;
-    echo!(a==3)
+    echo!(a==3);
+    echo!("ab", "bc", "cd");
 }
