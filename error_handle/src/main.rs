@@ -34,7 +34,7 @@ fn main() {
 }
 */
 
-// 使用?进行错误传播
+/*// 使用?进行错误传播
 fn main() {
     let ret = test();
     println!("{}", ret.unwrap_or_else(|error| {
@@ -66,4 +66,16 @@ fn test()->Result<String, String> {
     step1()?;
     step2()?;
     Ok("done".to_string())
+}*/
+use std::fs;
+use std::fs::File;
+use std::io::prelude::*;
+
+fn main() {
+    let path = "./src/text.txt";
+    let mut f = File::open(path).expect("open fail");
+    let mut buf = String::new();
+    f.read_to_string(&mut buf).expect("read fail");
+
+    println!("{}", buf);
 }
