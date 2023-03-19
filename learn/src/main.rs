@@ -1,5 +1,6 @@
 use std::ops;
 use std::ptr::addr_of_mut;
+use crate::Sex::Male;
 
 // mod lib;
 mod models;
@@ -226,13 +227,13 @@ fn main() {
 #[derive(Debug)]
 enum Sex {
     Male(String, u8),
-    Female(String),
+    Female(String)
 }
 
 #[derive(Debug)]
 struct User {
     id: i32,
-    sex: Sex
+    sex: Option<String>,
 }
 
 fn check(u:User) {
@@ -244,14 +245,15 @@ fn check(u:User) {
     //         println!("{}", "女性");
     //     },
     // };
-    if let Sex::Male(s, u) = u.sex{
-        println!("{},{}", s, u);
-    } else if let Sex::Female(s) = u.sex {
-        println!("{}", s);
-    }
+
+    // if let Some(s) = u.sex{
+    //     println!("{}", s);
+    // }
+
+    println!("{}", u.sex.unwrap());
 }
 
 fn main() {
-    let u = User{id: 1, sex: Sex::Male(String::from("男"), 1)};
+    let u = User{id: 1, sex: Some(String::from("M")) };
     check(u);
 }
