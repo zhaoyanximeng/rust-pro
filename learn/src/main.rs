@@ -1,6 +1,5 @@
 use std::ops;
 use std::ptr::addr_of_mut;
-use crate::Sex::Male;
 
 // mod lib;
 mod models;
@@ -223,7 +222,7 @@ fn main() {
 }*/
 
 
-// enum
+/*// enum
 #[derive(Debug)]
 enum Sex {
     Male(String, u8),
@@ -256,4 +255,15 @@ fn check(u:User) {
 fn main() {
     let u = User{id: 1, sex: Some(String::from("M")) };
     check(u);
+}*/
+
+// 宏
+#[macro_use]
+mod macros;
+
+fn main() {
+    echo!();
+    echo!("abc");
+    let a = 3;
+    echo!(a==3)
 }
