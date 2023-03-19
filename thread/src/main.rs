@@ -1,5 +1,6 @@
+use std::fmt::format;
 use std::rc::Rc;
-use std::sync::{mpsc, Arc};
+use std::sync::mpsc;
 use std::thread;
 use std::time::Duration;
 
@@ -25,6 +26,7 @@ fn main() {
     }
 }*/
 
+/*// 使用channel和Arc在不同线程内传递数据
 #[derive(Debug)]
 struct User {
     id: i32,
@@ -45,4 +47,36 @@ fn main() {
     println!("{:?}", user);
 
     println!("{:?}", rx.recv().unwrap());
+}*/
+
+/*fn curl(i: i32, tx:mpsc::Sender<String>) {
+    thread::sleep(Duration::from_secs(1));
+    tx.send(format!("第{}个网页抓取完成", i)).unwrap();
 }
+
+fn main() {
+    // let t1 = thread::spawn(|| curl(1));
+    // let t2 = thread::spawn(|| curl(2));
+    // t1.join().unwrap();
+    // t2.join().unwrap();
+
+    /*let mut thread_pool = Vec::new();
+    for i in 0..5 {
+        thread_pool.push(thread::spawn(move || curl(i)));
+    }
+    for t in thread_pool {
+        t.join().unwrap();
+    }*/
+
+    let (tx, rx) = mpsc::channel();
+    for i in 0..5 {
+        let clone_tx = tx.clone();
+        thread::spawn(move || {
+            curl(i, clone_tx);
+        });
+    }
+    thread::spawn(move || tx.send(String::from("开始抓取")).unwrap());
+    for ret in &rx {
+        println!("{}", ret);
+    }
+}*/
