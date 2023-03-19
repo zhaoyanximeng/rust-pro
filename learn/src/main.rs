@@ -201,7 +201,7 @@ fn main() {
     sum(book1 , book2)
 }*/
 
-// vector
+/*// vector
 fn main() {
     let mut tags = vec!["php", "java"];
     tags.push("go");
@@ -219,4 +219,39 @@ fn main() {
         *i = *i + 10;
     }
     println!("{:?}", tags1);
+}*/
+
+
+// enum
+#[derive(Debug)]
+enum Sex {
+    Male,
+    Female,
+}
+
+#[derive(Debug)]
+struct User {
+    id: i32,
+    sex: Sex
+}
+
+fn check(u:User) {
+    // match u.sex {
+    //     Sex::Male => {
+    //         println!("{}", "男性");
+    //     },
+    //     Sex::Female => {
+    //         println!("{}", "女性");
+    //     },
+    // };
+    if let Sex::Male = u.sex{
+        println!("男性");
+    } else if let Sex::Female = u.sex {
+        println!("女性");
+    }
+}
+
+fn main() {
+    let u = User{id: 1, sex: Sex::Female};
+    check(u);
 }
