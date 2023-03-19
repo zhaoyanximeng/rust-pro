@@ -1,3 +1,4 @@
+use std::sync::mpsc;
 use std::thread;
 use std::time::Duration;
 
@@ -9,8 +10,16 @@ fn printi() {
 }
 
 fn main() {
-    let t = thread::spawn(printi);
-    t.join().unwrap();
+    let (tx , rx):(mpsc::SyncSender<i32>, mpsc::Receiver<i32>)= mpsc::sync_channel(2);
 
-    println!("{}", "zyxm")
+    let t = thread::spawn(move || {
+        for i in 0..5 {
+            thread::sleep(Duration::from_millis(500));
+            tx.send(i).unwrap();
+        }
+    });
+    thread::sleep(Duration::from_secs(3));
+    for ret in rx {
+        println!("{}", ret)
+    }
 }
