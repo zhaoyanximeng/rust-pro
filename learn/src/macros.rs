@@ -12,3 +12,11 @@ macro_rules! echo {
         )+
     };
 }
+
+macro_rules! func {
+    ($fn_name:ident) => {
+        fn $fn_name() {
+            println!("my function,name is:{}", stringify!($fn_name));
+        }
+    };
+}
