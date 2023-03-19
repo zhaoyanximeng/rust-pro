@@ -1,4 +1,4 @@
-
+/*
 fn test(i:i32) ->Result<String, i32> {
     if i < 10 {
         Ok(String::from("success"))
@@ -31,4 +31,39 @@ fn main() {
     println!("{}", ret.unwrap_or_else(|error|{
         error.to_string()
     }))
+}
+*/
+
+// 使用?进行错误传播
+fn main() {
+    let ret = test();
+    println!("{}", ret.unwrap_or_else(|error| {
+        error
+    }))
+}
+
+fn step1()->Result<String, String> {
+    Err("err1".to_string())
+}
+
+fn step2()->Result<String, String> {
+    Err("err2".to_string())
+}
+
+fn test()->Result<String, String> {
+    // let ret1 = step1();
+    // if let Err(_) = ret1 {
+    //     Err("fail1".to_string())
+    // } else {
+    //     let ret2 = step2();
+    //     if let Err(_) = ret2 {
+    //         Err("fail2".to_string())
+    //     } else {
+    //         Ok("done".to_string())
+    //     }
+    // }
+
+    step1()?;
+    step2()?;
+    Ok("done".to_string())
 }
