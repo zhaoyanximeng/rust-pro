@@ -53,13 +53,24 @@ use tokio::io::AsyncWriteExt;
 use tokio::net::TcpListener;
 use tokio::net::TcpStream;
 use tokio::time::{timeout, Duration};
+use tokio::task;
 
 #[tokio::main]
 async fn main() {
     let server = TcpListener::bind("0.0.0:8080").await.unwrap();
     loop {
         let (mut stream, _) = server.accept().await.unwrap();
-        let rsp = String::from("http/1.1 200 Ok\r\n\r\n rust server");
-        stream.write_all(rsp.as_bytes()).await.unwrap();
+
+        task::spawn(async move {
+            let mut rsp = String::from("http/1.1 200 Ok\r\n\r\n rust server");
+            let ret = task::spawn_blocking(|| {
+                " bloking"
+            }).await;
+            if let Ok(s) = ret{
+                rsp.push_str(s);
+            }
+
+            stream.write_all(rsp.as_bytes()).await.unwrap();
+        });
     }
 }
