@@ -1,5 +1,5 @@
 use std::fmt::Formatter;
-#[derive(Default)]
+#[derive(Debug,Clone)]
 pub struct User {
     pub id: i32,
     pub name: String,
@@ -9,6 +9,12 @@ pub struct User {
 impl std::fmt::Display for User {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         write!(f, "用户id是{}，用户年龄是{}，用户名是{}", self.id, self.age, self.name)
+    }
+}
+
+impl Default for User {
+    fn default() -> Self {
+        User{id:0, name:String::from("zyxm1"), age: 18}
     }
 }
 

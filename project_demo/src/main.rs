@@ -1,5 +1,5 @@
 mod lib;
-use lib::prelude::CommonInit;
+use lib::prelude::UserInit;
 use lib::user::*;
 
 fn main() {
