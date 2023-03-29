@@ -1,12 +1,24 @@
-use serde::{Serialize, Deserialize};
+use serde::{Serialize, Deserialize, Serializer};
 use std::fmt::Formatter;
-#[derive(Debug,Clone,Serialize,Deserialize)]
+use serde::ser::SerializeStruct;
+
+#[derive(Debug,Clone)]
 pub struct User {
     pub id: i32,
-    #[serde(rename(serialize="user_name", deserialize="user_name"))]
+    // #[serde(rename(serialize="user_name", deserialize="user_name"))]
     pub name: String,
-    #[serde(default="User::default_age")]
+    // #[serde(default="User::default_age")]
     pub age: i32,
+}
+
+impl Serialize for User {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error> where S: Serializer {
+        let mut s = serializer.serialize_struct("User", 3)?;
+        s.serialize_field("name",&self.name)?;
+        s.serialize_field("id", &self.id)?;
+        s.serialize_field("age", &self.age)?;
+        s.end()
+    }
 }
 
 impl User{
