@@ -1,9 +1,18 @@
+use serde::{Serialize, Deserialize};
 use std::fmt::Formatter;
-#[derive(Debug,Clone)]
+#[derive(Debug,Clone,Serialize,Deserialize)]
 pub struct User {
     pub id: i32,
+    #[serde(rename(serialize="user_name", deserialize="user_name"))]
     pub name: String,
+    #[serde(default="User::default_age")]
     pub age: i32,
+}
+
+impl User{
+    fn default_age()->i32 {
+        18
+    }
 }
 
 impl std::fmt::Display for User {
