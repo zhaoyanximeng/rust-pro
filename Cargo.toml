@@ -1,3 +1,3 @@
 [workspace]
-members=["learn", "error_handle", "thread", "box_example", "tokio_demo", "practice"]
+members=["learn", "error_handle", "thread", "box_example", "tokio_demo", "practice", "project_demo"]
  
