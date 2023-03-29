@@ -1,8 +1,8 @@
-fn main() {
-    let a: User = User{id : 123, ..Default::default()};
-    let b = a.clone();
-    println!("{:?},{:?}", a,  b);
-}
+// fn main() {
+//     let a: User = User{id : 123, ..Default::default()};
+//     let b = a.clone();
+//     println!("{:?},{:?}", a,  b);
+// }
 
 impl Clone for User{
     fn clone(&self) -> Self {
@@ -19,4 +19,14 @@ struct User {
     id: i32,
     name: String,
     age: i32,
+}
+
+fn load_user(u:&mut User) {
+    u.age = 42;
+}
+
+fn main() {
+    let mut user = User{id: 123, ..Default::default()};
+    load_user(&mut user);
+    println!("a={:?}", user);
 }
