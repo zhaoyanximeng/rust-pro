@@ -19,17 +19,32 @@ struct User<'a>
     info:&'a dyn Fn(),
 }
 
+// fn main() {
+//     let str = String::from("abc");
+//     let f = || {
+//         println!("{}", str);
+//     };
+//     // exec(f);
+//     // exec(f);
+//
+//     // let u = User{id:1, info: f};
+//     // (u.info)();
+//
+//     let u = User{id:1, info: &f};
+//     (u.info)();
+// }
+
+fn myfn<F: FnMut()>(mut f:F) {
+    f();
+}
+
 fn main() {
-    let str = String::from("abc");
-    let f = || {
-        println!("{}", str);
+    let mut str = String::from("abc");
+    let mut f = || {
+        let a = &mut str;
+        a.push_str("123");
     };
-    // exec(f);
-    // exec(f);
-
-    // let u = User{id:1, info: f};
-    // (u.info)();
-
-    let u = User{id:1, info: &f};
-    (u.info)();
+    f();
+    myfn(f);
+    println!("{}", str);
 }
