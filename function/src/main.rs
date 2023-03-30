@@ -34,17 +34,31 @@ struct User<'a>
 //     (u.info)();
 // }
 
-fn myfn<F: FnMut()>(mut f:F) {
+// fn myfn<F: FnMut()>(mut f:F) {
+//     f();
+// }
+//
+// fn main() {
+//     let mut str = String::from("abc");
+//     let mut f = || {
+//         let a = &mut str;
+//         a.push_str("123");
+//     };
+//     f();
+//     myfn(f);
+//     println!("{}", str);
+// }
+
+fn myfn<F: FnOnce()>(f:F) {
     f();
 }
 
 fn main() {
-    let mut str = String::from("abc");
-    let mut f = || {
-        let a = &mut str;
+    let str = String::from("abc");
+    let f = || {
+        let mut  a = str;
         a.push_str("123");
+        println!("{}", a)
     };
-    f();
     myfn(f);
-    println!("{}", str);
 }
