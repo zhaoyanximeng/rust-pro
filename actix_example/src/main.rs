@@ -1,6 +1,6 @@
 use actix_web::{App, get, HttpRequest, HttpResponse, HttpServer, post, Responder, web};
-use web::Query;
 use serde;
+use validator::{Validate, ValidationError};
 
 #[derive(serde::Deserialize,Debug)]
 struct IndexParams {
@@ -14,15 +14,23 @@ fn default_name()->String{
     "guest".to_string()
 }
 
-#[derive(serde::Deserialize,serde::Serialize,Debug)]
+#[derive(serde::Deserialize,serde::Serialize,Debug,Validate)]
 struct UserModel {
+    #[serde(skip_deserializing)]
     user_id: i32,
+    #[validate(length(min = 4,message="用户名长度必须大于4"))]
     user_name: String,
+    #[validate(range(min = 1, max = 100,message="年龄必须介于1-100之间"))]
+    user_age:u8,
 }
 
 #[post("/users")]
 async fn users(body: Option<web::Json<UserModel>>)->impl Responder {
     if let Some(user) = body {
+        match user.validate() {
+            Ok(_) => return return HttpResponse::Ok().json( user),
+            Err(err) => return HttpResponse::Ok().json(err),
+        }
         return HttpResponse::Ok().json( user);
     }
     HttpResponse::BadRequest().body("参数格式不对")
