@@ -1,6 +1,12 @@
 use actix_web::{App, get, HttpRequest, HttpResponse, HttpServer, post, Responder, web};
 use serde;
 use validator::{Validate, ValidationError};
+use once_cell::sync::Lazy;
+use regex::Regex;
+
+static USERNAME_REG:Lazy<Regex> = Lazy::new(||{
+    Regex::new(r"[a-z]{4,20}").unwrap()
+});
 
 #[derive(serde::Deserialize,Debug)]
 struct IndexParams {
@@ -18,7 +24,8 @@ fn default_name()->String{
 struct UserModel {
     #[serde(skip_deserializing)]
     user_id: i32,
-    #[validate(length(min = 4,message="用户名长度必须大于4"))]
+    // #[validate(length(min = 4,message="用户名长度必须大于4"))]
+    #[validate(regex(path="USERNAME_REG",message="用户名长度必须为4-20且全为小写"))]
     user_name: String,
     #[validate(range(min = 1, max = 100,message="年龄必须介于1-100之间"))]
     user_age:u8,
