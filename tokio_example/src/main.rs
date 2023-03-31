@@ -89,17 +89,42 @@ async fn job(i: i32) -> i32 {
 //    h1.await.expect("内部任务出错").expect("超时出错");
 // }
 
-use tokio::sync::oneshot;
+use tokio::sync::{oneshot,mpsc};
 
-// oneshot 一对一通道
 #[tokio::main]
 async fn main() {
-    let (tx, rx) = oneshot::channel::<i32>();
+    // // oneshot 一对一通道
+    // let (tx, rx) = oneshot::channel::<i32>();
+    //
+    // let t1 = task::spawn(async {
+    //     time::sleep(Duration::from_secs(2)).await;
+    //     tx.send(123).unwrap();
+    // });
+    // let ret = rx.await.unwrap();
+    // println!("{}", ret);
 
-    let t1 = task::spawn(async {
-        time::sleep(Duration::from_secs(2)).await;
-        tx.send(123).unwrap();
+    // mpsc 多对一通道
+    let (tx,mut rx) = mpsc::channel(100);
+    let tx1 = tx.clone();
+    let tx2 = tx.clone();
+
+    task::spawn(async move{
+        let mut i = 0;
+        while i < 10 {
+            tx1.send(i).await.unwrap();
+            i = i + 1
+        }
     });
-    let ret = rx.await.unwrap();
-    println!("{}", ret);
+    drop(tx);
+    task::spawn(async move{
+        let mut i = 10;
+        while i < 20 {
+            tx2.send(i).await.unwrap();
+            i = i + 1
+        }
+    });
+
+    while let Some (ret) = rx.recv().await{
+        println!("{}", ret);
+    }
 }
