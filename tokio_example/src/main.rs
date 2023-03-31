@@ -1,7 +1,7 @@
 use chrono::Utc;
 use std::time::Duration;
 use tokio::runtime::*;
-use tokio::task;
+use tokio::{task, time};
 use tokio::time::*;
 
 async fn job(i: i32) -> i32 {
@@ -77,14 +77,29 @@ async fn job(i: i32) -> i32 {
 //     println!("{}", "abc");
 // }
 
+// #[tokio::main]
+// async fn main() {
+//     let t1 = timeout(Duration::from_secs(2), async {
+//        sleep(Duration::from_secs(5)).await;
+//         println!("任务完成");
+//         panic!("内部报错了")
+//     });
+//
+//    let h1 = task::spawn(t1);
+//    h1.await.expect("内部任务出错").expect("超时出错");
+// }
+
+use tokio::sync::oneshot;
+
+// oneshot 一对一通道
 #[tokio::main]
 async fn main() {
-    let t1 = timeout(Duration::from_secs(2), async {
-       sleep(Duration::from_secs(5)).await;
-        println!("任务完成");
-        panic!("内部报错了")
-    });
+    let (tx, rx) = oneshot::channel::<i32>();
 
-   let h1 = task::spawn(t1);
-   h1.await.expect("内部任务出错").expect("超时出错");
+    let t1 = task::spawn(async {
+        time::sleep(Duration::from_secs(2)).await;
+        tx.send(123).unwrap();
+    });
+    let ret = rx.await.unwrap();
+    println!("{}", ret);
 }
