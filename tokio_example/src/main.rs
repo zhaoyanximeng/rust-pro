@@ -41,7 +41,7 @@ async fn job(i: i32) -> i32 {
 //     println!("耗时:{}", (end_time - start_time).num_milliseconds());
 // }
 
-#[tokio::main]
+#[tokio::main(flavor="current_thread")]
 async fn main() {
 
     let h1 = task::spawn(async {
@@ -58,6 +58,12 @@ async fn main() {
         "h2"
     });
 
+    let h3 = task::spawn_blocking( ||{
+        std::thread::sleep(Duration::from_secs(8));
+        println!("h3已经完成了");
+        "h3"
+    });
+
     // h1.await.unwrap();
     // h2.await.unwrap();
     // let (_,serde_json) = tokio::join!(h1, h2);
@@ -65,6 +71,8 @@ async fn main() {
     println!("{}", ret1);
     let ret2 = h2.await.unwrap();
     println!("{}", ret2);
+    let ret3 = h3.await.unwrap();
+    println!("{}", ret3);
 
     println!("{}", "abc");
 }
