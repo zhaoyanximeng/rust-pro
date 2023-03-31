@@ -1,4 +1,4 @@
-use actix_web::{App, get, HttpRequest, HttpResponse, HttpServer, Responder, web};
+use actix_web::{App, get, HttpRequest, HttpResponse, HttpServer, post, Responder, web};
 use web::Query;
 use serde;
 
@@ -12,6 +12,20 @@ struct IndexParams {
 
 fn default_name()->String{
     "guest".to_string()
+}
+
+#[derive(serde::Deserialize,serde::Serialize,Debug)]
+struct UserModel {
+    user_id: i32,
+    user_name: String,
+}
+
+#[post("/users")]
+async fn users(body: Option<web::Json<UserModel>>)->impl Responder {
+    if let Some(user) = body {
+        return HttpResponse::Ok().json( user);
+    }
+    HttpResponse::BadRequest().body("参数格式不对")
 }
 
 #[get("/")]
@@ -30,6 +44,6 @@ async fn index(req: HttpRequest)->impl Responder {
 async fn main() -> std::io::Result<()> {
     HttpServer::new(|| {
 
-        App::new().service(index)
+        App::new().service(index).service(users)
     }).bind(("0.0.0.0", 8080))?.run().await
 }
