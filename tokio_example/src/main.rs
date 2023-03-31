@@ -41,38 +41,50 @@ async fn job(i: i32) -> i32 {
 //     println!("耗时:{}", (end_time - start_time).num_milliseconds());
 // }
 
-#[tokio::main(flavor="current_thread")]
+// #[tokio::main(flavor="current_thread")]
+// async fn main() {
+//
+//     let h1 = task::spawn(async {
+//         sleep(Duration::from_secs(5)).await;
+//         // println!("{}", "h1");
+//         println!("h1已经完成了");
+//         "h1"
+//     });
+//
+//     let h2 = task::spawn(async {
+//         sleep(Duration::from_secs(2)).await;
+//         // println!("{}", "h2");
+//         println!("h2已经完成了");
+//         "h2"
+//     });
+//
+//     let h3 = task::spawn_blocking( ||{
+//         std::thread::sleep(Duration::from_secs(8));
+//         println!("h3已经完成了");
+//         "h3"
+//     });
+//
+//     // h1.await.unwrap();
+//     // h2.await.unwrap();
+//     // let (_,serde_json) = tokio::join!(h1, h2);
+//     let ret1 = h1.await.unwrap();
+//     println!("{}", ret1);
+//     let ret2 = h2.await.unwrap();
+//     println!("{}", ret2);
+//     let ret3 = h3.await.unwrap();
+//     println!("{}", ret3);
+//
+//     println!("{}", "abc");
+// }
+
+#[tokio::main]
 async fn main() {
-
-    let h1 = task::spawn(async {
-        sleep(Duration::from_secs(5)).await;
-        // println!("{}", "h1");
-        println!("h1已经完成了");
-        "h1"
+    let t1 = timeout(Duration::from_secs(2), async {
+       sleep(Duration::from_secs(5)).await;
+        println!("任务完成");
+        panic!("内部报错了")
     });
 
-    let h2 = task::spawn(async {
-        sleep(Duration::from_secs(2)).await;
-        // println!("{}", "h2");
-        println!("h2已经完成了");
-        "h2"
-    });
-
-    let h3 = task::spawn_blocking( ||{
-        std::thread::sleep(Duration::from_secs(8));
-        println!("h3已经完成了");
-        "h3"
-    });
-
-    // h1.await.unwrap();
-    // h2.await.unwrap();
-    // let (_,serde_json) = tokio::join!(h1, h2);
-    let ret1 = h1.await.unwrap();
-    println!("{}", ret1);
-    let ret2 = h2.await.unwrap();
-    println!("{}", ret2);
-    let ret3 = h3.await.unwrap();
-    println!("{}", ret3);
-
-    println!("{}", "abc");
+   let h1 = task::spawn(t1);
+   h1.await.expect("内部任务出错").expect("超时出错");
 }
